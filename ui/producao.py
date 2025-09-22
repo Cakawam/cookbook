@@ -1,6 +1,7 @@
 # ui/producao.py
 import tkinter as tk
 from tkinter import ttk, messagebox
+from utils.unit_converter import UnitConverter
 
 class ProducaoTab(ttk.Frame):
     def __init__(self, parent, db):
@@ -13,6 +14,8 @@ class ProducaoTab(ttk.Frame):
         frm = ttk.Frame(self); frm.pack(fill='x', padx=6, pady=6)
         ttk.Label(frm, text='Receita:').grid(row=0,column=0); self.cmb_receitas = ttk.Combobox(frm, values=[], width=40); self.cmb_receitas.grid(row=0,column=1)
         ttk.Label(frm, text='Qtd produzida:').grid(row=1,column=0); self.ent_qtd = ttk.Entry(frm, width=12); self.ent_qtd.grid(row=1,column=1)
+        self.cmb_un = ttk.Combobox(frm, values=UnitConverter.common_units(), width=6); self.cmb_un.set('kg'); self.cmb_un.grid(row=1,column=2)
+
         ttk.Label(frm, text='Data (opcional DD/MM/AAAA):').grid(row=2,column=0); self.ent_data = ttk.Entry(frm, width=12); self.ent_data.grid(row=2,column=1)
         ttk.Button(frm, text='Registrar produção', command=self.on_produce).grid(row=3,column=0, columnspan=2, pady=8)
         ttk.Button(frm, text='Atualizar receitas', command=self.refresh_receitas).grid(row=4,column=0, columnspan=2)
@@ -36,7 +39,7 @@ class ProducaoTab(ttk.Frame):
             messagebox.showwarning('Erro','Qtd inválida'); return
         data = self.ent_data.get() or None
         try:
-            self.db.add_producao(rec['id'], qtd, data)
+            self.db.add_producao(rec['id'], qtd, data, self.cmb_un.get())
             messagebox.showinfo('Ok','Produção registrada')
         except Exception as e:
             messagebox.showerror('Erro ao produzir', str(e))

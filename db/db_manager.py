@@ -127,6 +127,7 @@ class DBManager:
             receita_id INTEGER,
             quantidade_produzida REAL,
             data TEXT,
+            unidade TEXT,
             FOREIGN KEY(receita_id) REFERENCES receitas(id)
         );
         CREATE TABLE IF NOT EXISTS vendas (
@@ -394,7 +395,7 @@ class DBManager:
         return {'total_cost': total_cost, 'cost_per_unit': cost_per_unit}
 
     # ---------------- Produção ----------------
-    def add_producao(self, receita_id, quantidade_produzida, data_str):
+    def add_producao(self, receita_id, quantidade_produzida, data_str, unidade):
         cur = self.conn.cursor()
         try:
             data_iso = parse_date_input(data_str)
@@ -413,7 +414,7 @@ class DBManager:
             for ing in ingredientes:
                 need = ing['quantidade_base'] * factor
                 if (ing['produto_qtd_atual'] or 0) < need - 1e-9:
-                    faltando.append(f"{ing['produto_nome']} (necessário {need:.4f}, disponível {ing['produto_qtd_atual'] or 0:.4f})")
+                    faltando.append(f"{ing['produto_nome']} (necessário {need:.2f}, disponível {ing['produto_qtd_atual'] or 0:.2f})")
             if faltando:
                 raise ValueError('Estoque insuficiente para produção:\n' + '\n'.join(faltando))
             # consumir insumos
@@ -421,7 +422,7 @@ class DBManager:
                 need = ing['quantidade_base'] * factor
                 self.consume_from_lotes(ing['produto_id'], need, motivo=f'Produção {receita_nome}')
             # registrar produção e criar lote do produto final (nome da receita)
-            cur.execute('INSERT INTO producoes (receita_id, quantidade_produzida, data) VALUES (?,?,?)', (receita_id, quantidade_produzida, data_iso))
+            cur.execute('INSERT INTO producoes (receita_id, quantidade_produzida, data, unidade) VALUES (?,?,?,?)', (receita_id, quantidade_produzida, data_iso, unidade))
             produto_id = self.add_or_get_produto(receita_nome, unidade_resultado)
             cur.execute('INSERT INTO lotes (produto_id, quantidade_base, data_compra, data_validade, lote) VALUES (?,?,?,?,?)', (produto_id, quantidade_produzida, data_iso, None, 'producao'))
             cur.execute('SELECT SUM(quantidade_base) as total FROM lotes WHERE produto_id = ?', (produto_id,))
