@@ -2,6 +2,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 from utils.unit_converter import UnitConverter
+from utils.trunc import truncar_float
 from datetime import datetime
 
 class ComprasTab(ttk.Frame):
@@ -34,12 +35,12 @@ class ComprasTab(ttk.Frame):
         if not produto:
             messagebox.showwarning('Erro','Informe o nome do produto'); return
         try:
-            qtd = float(self.ent_qtd.get())
+            qtd = truncar_float(float(self.ent_qtd.get()))
         except Exception:
             messagebox.showwarning('Erro','Quantidade inválida'); return
         unidade = self.cmb_un.get()
         try:
-            preco = float(self.ent_preco.get())
+            preco = truncar_float(float(self.ent_preco.get()))
         except Exception:
             messagebox.showwarning('Erro','Preço inválido'); return
         data = self.ent_data.get() or None
@@ -58,7 +59,7 @@ class ComprasTab(ttk.Frame):
         for r in rows:
             fornecedor = r['fornecedor_nome'] if 'fornecedor_nome' in r.keys() else ''
             try:
-                qtd_s = f"{float(r['quantidade'] or 0):.4f}"
+                qtd_s = f"{float(r['quantidade'] or 0):.2f}"
             except Exception:
                 qtd_s = str(r['quantidade'] or '')
             preco_s = f"{float(r['preco_total'] or 0):.2f}"

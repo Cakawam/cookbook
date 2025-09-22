@@ -29,9 +29,9 @@ class EstoqueTab(ttk.Frame):
         for r in self.tree.get_children(): self.tree.delete(r)
         for r in self.expire_tree.get_children(): self.expire_tree.delete(r)
         for p in self.db.get_produtos():
-            self.tree.insert('', 'end', values=(p['nome'], f"{p['quantidade']:.4f}", p['unidade_base'], p['reorder_level'] or 0))
+            self.tree.insert('', 'end', values=(p['nome'], f"{p['quantidade']:.2f}", p['unidade_base'], p['reorder_level'] or 0))
         for l in self.db.lots_expiring_within(days=7):
-            self.expire_tree.insert('', 'end', values=(l['nome'], f"{l['quantidade_base']:.4f}", iso_to_display(l['data_validade'])))
+            self.expire_tree.insert('', 'end', values=(l['nome'], f"{l['quantidade_base']:.2f}", iso_to_display(l['data_validade'])))
 
     def _gen_reorder(self):
         import tkinter.filedialog as fd

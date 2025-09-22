@@ -17,6 +17,55 @@ class DBManager:
         self.conn.row_factory = sqlite3.Row
         self._create_tables()
 
+    def get_connection(self):
+        """Retorna o objeto de conexão DB-API 2 do sqlite3."""
+        return self.conn
+    
+    def close(self):
+        """Fecha a conexão com o banco de dados."""
+        if self.conn:
+            self.conn.close()
+            print("Conexão com o banco de dados fechada.")
+
+        # --- MÉTODO NOVO / ATUALIZADO ---
+    def total_stock_value(self):
+        """Calcula o valor total do estoque."""
+        cursor = self.conn.cursor()
+        query = """
+        SELECT SUM(COALESCE(quantidade, 0) * COALESCE(ultima_compra_unitaria, 0)) as total_value
+        FROM produtos;
+        """
+        result = cursor.execute(query).fetchone()
+        
+        # Se não houver produtos, o resultado pode ser None
+        return result['total_value'] if result and result['total_value'] else 0.0
+
+    # --- MÉTODO NOVO / ATUALIZADO ---
+    def compute_sales_and_cogs(self, days=30):
+        """Calcula a receita e o custo estimado (COGS) dos últimos X dias."""
+        cursor = self.conn.cursor()
+        
+        # Query para calcular a receita (Revenue)
+        revenue_query = f"""
+        SELECT SUM(COALESCE(v.quantidade_base, 0) * COALESCE(v.preco_unitario, 0)) as total_revenue
+        FROM vendas v
+        WHERE date(v.data) >= date('now', '-{days} days');
+        """
+        revenue_result = cursor.execute(revenue_query).fetchone()
+        revenue = revenue_result['total_revenue'] if revenue_result and revenue_result['total_revenue'] else 0.0
+
+        # Query para calcular o custo estimado dos produtos vendidos (COGS)
+        cogs_query = f"""
+        SELECT SUM(COALESCE(v.quantidade_base, 0) * COALESCE(p.ultima_compra_unitaria, 0)) as total_cogs
+        FROM vendas v
+        JOIN produtos p ON v.produto_id = p.id
+        WHERE date(v.data) >= date('now', '-{days} days');
+        """
+        cogs_result = cursor.execute(cogs_query).fetchone()
+        cogs = cogs_result['total_cogs'] if cogs_result and cogs_result['total_cogs'] else 0.0
+
+        return {'revenue': revenue, 'cogs_est': cogs}
+
     def _create_tables(self):
         cur = self.conn.cursor()
         cur.executescript('''

@@ -1,0 +1,15 @@
+tratar casa decimais de quamtidades na aba compras - concluido
+
+vendas não tem que consumir de produtos e sim de receitas
+
+adicionar unidade em produção (Kilo, litros, un
+)
+
+editar estoque
+
+Receitas:
+Ingrediente tem q ser lista suspensa
+Unid Resultado lista suspensa
+Trazer valor de cada ingrediente
+Trazer custo total da receita + 20%
+Editar Receitas Existentes

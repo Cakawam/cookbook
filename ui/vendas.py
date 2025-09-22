@@ -87,4 +87,4 @@ class VendasTab(ttk.Frame):
         for r in self.vendas_tree.get_children(): self.vendas_tree.delete(r)
         rows = self.db.get_vendas_por_data(self.ent_data.get() or None)
         for r in rows:
-            self.vendas_tree.insert('', 'end', values=(r['nome'], f"{float(r['quantidade']):.4f}", r['quantidade_base'], f"{float(r['preco_unitario']):.2f}", r['data']))
+            self.vendas_tree.insert('', 'end', values=(r['nome'], f"{float(r['quantidade']):.2f}", r['quantidade_base'], f"{float(r['preco_unitario']):.2f}", r['data']))
