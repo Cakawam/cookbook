@@ -16,11 +16,10 @@ class ReceitasTab(ttk.Frame):
         frm = ttk.Frame(self); frm.pack(fill='x', padx=6, pady=6)
         ttk.Label(frm, text='Nome:').grid(row=0,column=0); self.ent_nome = ttk.Entry(frm, width=30); self.ent_nome.grid(row=0,column=1)
         ttk.Label(frm, text='Rendimento:').grid(row=0,column=2); self.ent_rend = ttk.Entry(frm, width=10); self.ent_rend.grid(row=0,column=3)
-        ttk.Label(frm, text='Unid resultado:').grid(row=0,column=4); self.ent_un_res = ttk.Entry(frm, width=6); self.ent_un_res.insert(0,'un'); self.ent_un_res.grid(row=0,column=5)
+        ttk.Label(frm, text='Unid resultado:').grid(row=0,column=4); self.ent_un_res = ttk.Combobox(frm, values=UnitConverter.common_units(), width=6); self.ent_un_res.set('un'); self.ent_un_res.grid(row=0,column=5)
 
         # ingredientes
         ttk.Label(frm, text='Ingrediente:').grid(row=1,column=0); self.ent_ing = ttk.Combobox(frm, values=[p['nome'] for p in self.db.get_produtos()], width=40); self.ent_ing.grid(row=1,column=1)
-        # ttk.Label(frm, text='Produto:').grid(row=0,column=0); self.cmb_prod = ttk.Combobox(frm, values=[], width=40); self.cmb_prod.grid(row=0,column=1)
         ttk.Label(frm, text='Qtd:').grid(row=1,column=2); self.ent_ing_qtd = ttk.Entry(frm, width=10); self.ent_ing_qtd.grid(row=1,column=3)
         ttk.Label(frm, text='Unid:').grid(row=1,column=4); self.cmb_ing_un = ttk.Combobox(frm, values=UnitConverter.common_units(), width=6); self.cmb_ing_un.set('g'); self.cmb_ing_un.grid(row=1,column=5)
         ttk.Button(frm, text='Adicionar ingrediente', command=self.add_ingredient).grid(row=1,column=6, padx=6)

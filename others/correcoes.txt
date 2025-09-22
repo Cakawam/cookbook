@@ -7,8 +7,8 @@ adicionar unidade em produção (Kilo, litros, un) - concluido
 editar estoque
 
 Receitas:
-Ingrediente tem q ser lista suspensa
-Unid Resultado lista suspensa
+Ingrediente tem q ser lista suspensa - concluido
+Unid Resultado lista suspensa - concluido
 Trazer valor de cada ingrediente
 Trazer custo total da receita + 20%
 Editar Receitas Existentes

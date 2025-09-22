@@ -328,6 +328,7 @@ class DBManager:
         return cur.fetchall()
 
     # ---------------- Receitas / ingredientes ----------------
+
     def add_receita(self, nome, rendimento, unidade_resultado='un'):
         cur = self.conn.cursor()
         try:
