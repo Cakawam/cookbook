@@ -2,8 +2,7 @@ tratar casa decimais de quamtidades na aba compras - concluido
 
 vendas não tem que consumir de produtos e sim de receitas
 
-adicionar unidade em produção (Kilo, litros, un
-)
+adicionar unidade em produção (Kilo, litros, un) - concluido
 
 editar estoque
 
